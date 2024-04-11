@@ -7,33 +7,33 @@ const test = (req, res, next) => {
 
 const setTime = async (req, res, next) => {
     try {
-        if (TaskModel.dueDate.startDate && TaskModel.dueDate.endDate) {
-            const startDate = new Date(TaskModel.dueDate.startDate);
-            const endDate = new Date(TaskModel.dueDate.endDate);
-            const durationInMs = endDate - startDate;
+        // if (TaskModel.dueDate.startDate && TaskModel.dueDate.endDate) {
+        //     const startDate = new Date(TaskModel.dueDate.startDate);
+        //     const endDate = new Date(TaskModel.dueDate.endDate);
+        //     const durationInMs = endDate - startDate;
     
-            // Convert milliseconds to minutes, hours, or days
-            const durationInMinutes = durationInMs / (1000 * 60);
-            const durationInHours = durationInMs / (1000 * 60 * 60);
-            const durationInDays = durationInMs / (1000 * 60 * 60 * 24);
+        //     // Convert milliseconds to minutes, hours, or days
+        //     const durationInMinutes = durationInMs / (1000 * 60);
+        //     const durationInHours = durationInMs / (1000 * 60 * 60);
+        //     const durationInDays = durationInMs / (1000 * 60 * 60 * 24);
     
-            // Determine the appropriate unit and duration
-            let duration;
-            let durationType;
-            if (durationInDays >= 1) {
-                duration = Math.round(durationInDays);
-                durationType = "Days";
-            } else if (durationInHours >= 1) {
-                duration = Math.round(durationInHours);
-                durationType = "Hours";
-            } else {
-                duration = Math.round(durationInMinutes);
-                durationType = "Minutes";
-            }
+        //     // Determine the appropriate unit and duration
+        //     let duration;
+        //     let durationType;
+        //     if (durationInDays >= 1) {
+        //         duration = Math.round(durationInDays);
+        //         durationType = "Days";
+        //     } else if (durationInHours >= 1) {
+        //         duration = Math.round(durationInHours);
+        //         durationType = "Hours";
+        //     } else {
+        //         duration = Math.round(durationInMinutes);
+        //         durationType = "Minutes";
+        //     }
     
-            //return { duration, durationType };
-            return res.status(200).send({message: "the duration of the task is "+duration+" "+durationType})
-        }
+        //     //return { duration, durationType };
+        //     return res.status(200).send({message: "the duration of the task is "+duration+" "+durationType})
+        // }
     }
     catch (error) {
         res.status(500).send(error.message)
@@ -84,7 +84,7 @@ const updateTask = async (req, res, next) => {
         if (!updatedTask) {
             return res.status(404).json({ message: 'Task not found' });
         } 
-        return res.status(200).json(updatedTask);
+        return res.status(200).json({message:"updated task successfully!", updatedTask});
     } catch (error) {
         next(error);
     }
@@ -106,8 +106,12 @@ const findById = async (req, res, next) => {
 
 const deleteTask = async (req, res, next) => {
     try {
+        const foundTask = await TaskModel.findById(taskId);
+        if (!foundTask) {
+            return res.status(404).json({ message: "Task not found"});
+        }
         const deletedTask = await TaskModel.findByIdAndDelete(req.query.id);
-        return res.status(200).json({ message: 'Task deleted'});
+        return res.status(200).json({ message: 'Task deleted', TASK: deletedTask});
     } catch (error) {
         next(error);
     }

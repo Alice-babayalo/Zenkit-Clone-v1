@@ -21,19 +21,19 @@ const TaskSchema = new Schema({
     dueDate: {
         startDate: {
             type: Date,
-            required: false,
+            required: true,
         },
         endDate: {
             type: Date,
-            required: false,
+            required: true,
         },
         startTime: {
             type: String,
-            required: false,
+            required: true,
         },
         endTime: {
             type: String,
-            required: false,
+            required: true,
         },
         duration: {
             type: Number,
