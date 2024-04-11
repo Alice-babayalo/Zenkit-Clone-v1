@@ -1,11 +1,11 @@
-import dotenv from "../package.json";
+const dotenv = require("../package.json");
 dotenv.config();
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
-import configurations from "./configs/index.js";
-import taskRouter from "./routes/task.routes.js";
-import ErrorHandler from "./middlewares/ErrorHandler.js";
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const configurations = require("./configs/index.js");
+const taskRouter = require("./routes/task.routes.js");
+const ErrorHandler = require("./middlewares/ErrorHandler.js");
 
 const corsOptions = {
     allowedHeaders: ["Authorization","Content-Type"],

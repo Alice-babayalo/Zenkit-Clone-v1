@@ -1,11 +1,12 @@
-import TaskModel from '../models/task.model.js';
+const { get } = require('mongoose');
+const  TaskModel = require('../models/task.model.js');
 
-export const test = (req, res, next) => {
+ const test = (req, res, next) => {
     res.send('Hello World!');
 }
 
 
-export const setTime = async (req, res, next) => {
+ const setTime = async (req, res, next) => {
     console.log(req.body.dueDate);
     var startTime = "";
     var endTime = "";
@@ -25,7 +26,7 @@ export const setTime = async (req, res, next) => {
     next();
 }
 
-export const addTask = async (req, res, next) => {
+ const addTask = async (req, res, next) => {
     try {
         const newTask = await TaskModel.create(req.body);
         return res.status(201).json(newTask);
@@ -34,7 +35,7 @@ export const addTask = async (req, res, next) => {
     }
 };
 
-export const getTasks = async (req, res, next) => {
+ const getTasks = async (req, res, next) => {
     try {
         const tasks = await TaskModel.find({});
         if (tasks) {
@@ -56,7 +57,7 @@ export const getTasks = async (req, res, next) => {
  *
  * @throws {Error} - Throws an error if the task is not found.
  */
-export const updateTask = async (req, res, next) => {
+ const updateTask = async (req, res, next) => {
     const taskId = req.query.id;
     const updates = req.body;
 
@@ -71,7 +72,7 @@ export const updateTask = async (req, res, next) => {
     }
 }
 
-export const findById = async (req, res, next) => {
+ const findById = async (req, res, next) => {
     const taskId = req.query.id;
     
     try {
@@ -85,7 +86,7 @@ export const findById = async (req, res, next) => {
     }
 }
 
-export const deleteTask = async (req, res, next) => {
+ const deleteTask = async (req, res, next) => {
     try {
         const deletedTask = await TaskModel.findByIdAndDelete(req.query.id);
         return res.status(200).json({ message: 'Task deleted'});
@@ -93,3 +94,6 @@ export const deleteTask = async (req, res, next) => {
         next(error);
     }
 }
+
+
+module.exports -{test, setTime, addTask, getTasks, updateTask, findById, deleteTask}

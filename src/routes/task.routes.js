@@ -1,6 +1,6 @@
-import express from 'express';
+const express = require('express');
 const taskRouter = express.Router();
-import { test, addTask, deleteTask, getTasks, findById, updateTask, setTime } from '../controllers/task.controller.js';
+const { test, addTask, deleteTask, getTasks, findById, updateTask, setTime } = require('../controllers/task.controller.js');
 
 taskRouter.get('/test', test);
 taskRouter.post('/add', setTime, addTask);
