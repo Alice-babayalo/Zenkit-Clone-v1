@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 
 const Configs = {
     MONGODB_CONNECTION_STRING: process.env.MONGODB_CONNECTION_STRING,
@@ -10,4 +8,4 @@ const Configs = {
     JWT_REFRESH_COOKIE_NAME: process.env.JWT_REFRESH_COOKIE_NAME,
 }
 
-export default Configs;
+module.exports = Configs;

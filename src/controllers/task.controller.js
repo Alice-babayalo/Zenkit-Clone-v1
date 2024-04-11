@@ -1,32 +1,50 @@
-const { get } = require('mongoose');
-const  TaskModel = require('../models/task.model.js');
+const TaskModel = require('../models/task.model.js');
 
- const test = (req, res, next) => {
+const test = (req, res, next) => {
     res.send('Hello World!');
 }
 
 
- const setTime = async (req, res, next) => {
-    console.log(req.body.dueDate);
-    var startTime = "";
-    var endTime = "";
-    if (req.body.dueDate.startDate) {
-        startTime = new Date(req.body.dueDate.startDate).toLocaleTimeString();
+const setTime = async (req, res, next) => {
+    try {
+        if (TaskModel.dueDate.startDate && TaskModel.dueDate.endDate) {
+            const startDate = new Date(TaskModel.dueDate.startDate);
+            const endDate = new Date(TaskModel.dueDate.endDate);
+            const durationInMs = endDate - startDate;
+    
+            // Convert milliseconds to minutes, hours, or days
+            const durationInMinutes = durationInMs / (1000 * 60);
+            const durationInHours = durationInMs / (1000 * 60 * 60);
+            const durationInDays = durationInMs / (1000 * 60 * 60 * 24);
+    
+            // Determine the appropriate unit and duration
+            let duration;
+            let durationType;
+            if (durationInDays >= 1) {
+                duration = Math.round(durationInDays);
+                durationType = "Days";
+            } else if (durationInHours >= 1) {
+                duration = Math.round(durationInHours);
+                durationType = "Hours";
+            } else {
+                duration = Math.round(durationInMinutes);
+                durationType = "Minutes";
+            }
+    
+            //return { duration, durationType };
+            return res.status(200).send({message: "the duration of the task is "+duration+" "+durationType})
+        }
     }
-    if (req.body.dueDate.endDate) {
-        endTime = new Date(req.body.dueDate.endDate).toLocaleTimeString();
+    catch (error) {
+        res.status(500).send(error.message)
     }
-    req.body.dueDate.startTime = startTime;
-    req.body.dueDate.endTime = endTime;
-
-    console.log(req.body.dueDate);
     // Your task.
     // Calculate the duration of the task by using the startDate and endDate.
     // Determine wether the duration is in min, hours, days.
     next();
 }
 
- const addTask = async (req, res, next) => {
+const addTask = async (req, res, next) => {
     try {
         const newTask = await TaskModel.create(req.body);
         return res.status(201).json(newTask);
@@ -35,7 +53,7 @@ const  TaskModel = require('../models/task.model.js');
     }
 };
 
- const getTasks = async (req, res, next) => {
+const getTasks = async (req, res, next) => {
     try {
         const tasks = await TaskModel.find({});
         if (tasks) {
@@ -57,7 +75,7 @@ const  TaskModel = require('../models/task.model.js');
  *
  * @throws {Error} - Throws an error if the task is not found.
  */
- const updateTask = async (req, res, next) => {
+const updateTask = async (req, res, next) => {
     const taskId = req.query.id;
     const updates = req.body;
 
@@ -72,7 +90,7 @@ const  TaskModel = require('../models/task.model.js');
     }
 }
 
- const findById = async (req, res, next) => {
+const findById = async (req, res, next) => {
     const taskId = req.query.id;
     
     try {
@@ -86,7 +104,7 @@ const  TaskModel = require('../models/task.model.js');
     }
 }
 
- const deleteTask = async (req, res, next) => {
+const deleteTask = async (req, res, next) => {
     try {
         const deletedTask = await TaskModel.findByIdAndDelete(req.query.id);
         return res.status(200).json({ message: 'Task deleted'});
@@ -96,4 +114,4 @@ const  TaskModel = require('../models/task.model.js');
 }
 
 
-module.exports -{test, setTime, addTask, getTasks, updateTask, findById, deleteTask}
+module.exports = {test, setTime, addTask, getTasks, updateTask, findById, deleteTask};

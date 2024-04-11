@@ -1,5 +1,3 @@
-const dotenv = require("../package.json");
-dotenv.config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -18,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/task', taskRouter);
 
-mongoose.connect("mongodb+srv://Alice:12345@cluster0.6eqmb7j.mongodb.net/zenkit")
+mongoose.connect("mongodb+srv://Alice:12345@cluster0.6eqmb7j.mongodb.net/zenkit-clone-v1")
 .then(() => {
     console.log("Connected to MongoDB");
 })
